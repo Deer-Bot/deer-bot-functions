@@ -1,0 +1,23 @@
+{
+  "bindings": [
+    {
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req"
+    },
+    {
+      "name": "guild",
+      "type": "cosmosDB",
+      "databaseName": "deer-bot-db",
+      "collectionName": "Guilds",
+      "createIfNotExists": false,
+      "connectionStringSetting": "COSMOSDB_CONNECTION_STRING",
+      "direction": "out"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    }
+  ]
+}
