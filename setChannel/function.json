@@ -6,18 +6,28 @@
       "name": "req"
     },
     {
-      "name": "guild",
+      "type": "http",
+      "direction": "out",
+      "name": "$return"
+    },
+    {
       "type": "cosmosDB",
+      "name": "guildIn",
+      "databaseName": "deer-bot-db",
+      "collectionName": "Guilds",
+      "connectionStringSetting": "COSMOSDB_CONNECTION_STRING",
+      "direction": "in",
+      "sqlQuery": "SELECT * FROM c where c.guild = {guild}",
+      "PartitionKey": "{guild}"
+    },
+    {
+      "type": "cosmosDB",
+      "name": "guildOut",
       "databaseName": "deer-bot-db",
       "collectionName": "Guilds",
       "createIfNotExists": false,
       "connectionStringSetting": "COSMOSDB_CONNECTION_STRING",
       "direction": "out"
-    },
-    {
-      "type": "http",
-      "direction": "out",
-      "name": "res"
     }
   ]
 }
