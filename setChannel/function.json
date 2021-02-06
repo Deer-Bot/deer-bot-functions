@@ -15,7 +15,7 @@
       "name": "guildIn",
       "databaseName": "deer-bot-db",
       "collectionName": "Guilds",
-      "connectionStringSetting": "COSMOSDB_CONNECTION_STRING",
+      "connectionStringSetting": "COSMOS_CONNECTION_STRING",
       "direction": "in",
       "sqlQuery": "SELECT * FROM c where c.guild = {guild}",
       "PartitionKey": "{guild}"
@@ -26,7 +26,7 @@
       "databaseName": "deer-bot-db",
       "collectionName": "Guilds",
       "createIfNotExists": false,
-      "connectionStringSetting": "COSMOSDB_CONNECTION_STRING",
+      "connectionStringSetting": "COSMOS_CONNECTION_STRING",
       "direction": "out"
     }
   ]
