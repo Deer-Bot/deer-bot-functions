@@ -10,6 +10,10 @@ module.exports = async function(context, req, guildIn) {
   }
 
   return {
-    status: '204',
+    status: '200',
+    body: {
+      guild: null,
+      message: 'Guild not found',
+    },
   };
 };
