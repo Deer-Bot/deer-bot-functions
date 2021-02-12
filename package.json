@@ -20,5 +20,10 @@
     "eslint": "^7.19.0",
     "eslint-config-google": "^0.14.0"
   },
-  "private": "true"
+  "private": "true",
+  "dependencies": {
+    "@azure/cosmos": "^3.9.5",
+    "bluebird": "^3.7.2",
+    "redis": "^3.0.2"
+  }
 }

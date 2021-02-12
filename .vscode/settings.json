@@ -3,5 +3,6 @@
     "azureFunctions.postDeployTask": "npm install",
     "azureFunctions.projectLanguage": "JavaScript",
     "azureFunctions.projectRuntime": "~3",
-    "azureFunctions.preDeployTask": "npm prune"
+    "azureFunctions.preDeployTask": "npm prune",
+    "editor.tabSize": 2
 }
