@@ -105,3 +105,4 @@ dist
 
 # Local settings function App
 local.settings.json
+*.http

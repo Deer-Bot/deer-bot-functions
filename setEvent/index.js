@@ -3,16 +3,14 @@
 */
 const RedisClient = require('../redis/client');
 const CosmosClient = new (require('../cosmos/client'))('Events');
-let franco;
 
 module.exports = async function(context, req) {
   if (req.body && req.body.user) {
     try {
-      franco = context;
       // set event document object
       const userSession = await RedisClient.get(req.body.user);
       // Parse of the nested object
-      const event = JSON.parse(userSession?.event);
+      const [event] = JSON.parse(userSession?.events);
 
       if (event) {
         const eventIn = {};
@@ -72,11 +70,8 @@ module.exports = async function(context, req) {
 function getDateReminder(eventDate, globalReminder, privateReminder) {
   // Date for next global reminder
   const globalDate = new Date(Date.now());
-  franco.log(globalDate);
   globalDate.setUTCDate(globalDate.getDate() + (+globalReminder));
-  franco.log(globalDate);
   globalDate.setUTCHours(0, 0);
-  franco.log(globalDate);
   // Date for next private reminder
   const privateDate = new Date(eventDate);
   const hours = Math.floor(privateReminder / 60);

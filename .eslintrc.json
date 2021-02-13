@@ -11,7 +11,8 @@
         "ecmaVersion": 12
     },
     "rules": {
-        "max-len": "off", 
+        "max-len": "off",
+        "linebreak-style": "off",
         "require-jsdoc": "off"
     }
 }
