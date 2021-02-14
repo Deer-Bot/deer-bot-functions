@@ -2,7 +2,6 @@ const CosmosClient = new (require('../cosmos/client'))('Events');
 
 module.exports = async function(context, req) {
   if (req.query.author && req.query.number) {
-    context.log(req.query.number);
     const sqlQuery = {
       query: `SELECT * FROM Events e WHERE e.author = @author ORDER BY e.name OFFSET @offset LIMIT @number`,
       parameters: [

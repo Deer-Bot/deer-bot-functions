@@ -7,16 +7,17 @@ const CosmosClient = new (require('../cosmos/client'))('Events');
 module.exports = async function(context, req) {
   if (req.body && req.body.user) {
     try {
-      // set event document object
+      // get event document object
       const userSession = await RedisClient.get(req.body.user);
       // Parse of the nested object
       const [event] = JSON.parse(userSession?.events);
 
       if (event) {
-        const eventIn = {};
+        let eventIn = {};
         // Checks if the document already exists
         if (event.id) {
-          eventIn = await CosmosClient.get(event.id, '/author');
+          const item = await CosmosClient.get(event.id, event.author);
+          eventIn = item.resource; // resource contains the document retrivied
         }
 
         // Set document object
@@ -32,7 +33,6 @@ module.exports = async function(context, req) {
         const {globalDate, privateDate} = getDateReminder(context.bindings.eventOut.date, context.bindings.eventOut.globalReminder, context.bindings.eventOut.privateReminder);
         context.bindings.eventOut.globalReminderDate = globalDate;
         context.bindings.eventOut.privateReminderDate = privateDate;
-
         // Delete session from cache
         await RedisClient.del(req.body.user);
       } else {
