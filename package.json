@@ -24,6 +24,7 @@
   "dependencies": {
     "@azure/cosmos": "^3.9.5",
     "bluebird": "^3.7.2",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "tedis": "^0.1.12"
   }
 }
