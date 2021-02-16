@@ -1,3 +1,5 @@
+'use strict';
+
 const {Tedis} = require('tedis');
 
 const cacheConnection = new Tedis({

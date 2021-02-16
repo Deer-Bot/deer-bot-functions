@@ -1,0 +1,20 @@
+{
+  "bindings": [
+    {
+      "name": "myTimer",
+      "type": "timerTrigger",
+      "direction": "in",
+      "schedule": "20 1 20 */1 * *",
+      "runOnStartup": false
+    },
+    {
+      "type": "cosmosDB",
+      "name": "eventsToRemind",
+      "databaseName": "deer-bot-db",
+      "collectionName": "Events",
+      "connectionStringSetting": "COSMOS_CONNECTION_STRING",
+      "direction": "in",
+      "sqlQuery": "SELECT * FROM e WHERE e.globalReminderDate < GetCurrentDateTime()"
+    }
+  ]
+}

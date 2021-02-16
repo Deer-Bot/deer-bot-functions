@@ -31,6 +31,15 @@
       "createIfNotExists": false,
       "connectionStringSetting": "COSMOS_CONNECTION_STRING",
       "direction": "out"
+    },
+    {
+      "type": "cosmosDB",
+      "name": "eventsUpdated",
+      "databaseName": "deer-bot-db",
+      "collectionName": "Events",
+      "createIfNotExists": false,
+      "connectionStringSetting": "COSMOS_CONNECTION_STRING",
+      "direction": "out"
     }
   ]
 }

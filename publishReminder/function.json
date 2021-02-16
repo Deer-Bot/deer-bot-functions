@@ -1,0 +1,27 @@
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "post"
+      ]
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "$return"
+    },
+    {
+      "type": "cosmosDB",
+      "name": "updateEvents",
+      "databaseName": "deer-bot-db",
+      "collectionName": "Events",
+      "createIfNotExists": false,
+      "connectionStringSetting": "COSMOS_CONNECTION_STRING",
+      "direction": "out"
+    }
+  ]
+}

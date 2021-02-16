@@ -1,5 +1,10 @@
-const CosmosClient = new (require('../cosmos/client'))('Events');
+'use strict';
 
+const CosmosClient = new (require('../clients/cosmos-client'))('Events');
+
+/*
+  Retrieves the events created by the author
+*/
 module.exports = async function(context, req) {
   if (req.query.author && req.query.number) {
     const sqlQuery = {

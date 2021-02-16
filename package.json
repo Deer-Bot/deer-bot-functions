@@ -23,7 +23,9 @@
   "private": "true",
   "dependencies": {
     "@azure/cosmos": "^3.9.5",
+    "axios": "^0.21.1",
     "bluebird": "^3.7.2",
+    "discord.js-light": "^3.5.3",
     "tedis": "^0.1.12"
   }
 }
