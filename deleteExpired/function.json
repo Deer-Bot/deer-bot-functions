@@ -1,0 +1,21 @@
+{
+  "bindings": [
+    {
+      "name": "myTimer",
+      "type": "timerTrigger",
+      "direction": "in",
+      "schedule": "0 0 0 */3 * *",
+      "runOnStartup": true
+    },
+    {
+      "type": "cosmosDB",
+      "name": "expiredEvents",
+      "databaseName": "deer-bot-db",
+      "collectionName": "Events",
+      "connectionStringSetting": "COSMOS_CONNECTION_STRING",
+      "direction": "in",
+      "sqlQuery": "SELECT * FROM e WHERE e.date < GetCurrentDateTime()"
+    }
+
+  ]
+}

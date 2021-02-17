@@ -43,6 +43,16 @@ class Client {
   async delete(id, partitionKey) {
     return this.container.item(id, partitionKey).delete();
   }
+
+  /**
+   *  Calls a stored procedure from the container
+   * @param {string} name name of the stored procedure
+   * @param {any} partitionKey partition key value
+   * @param {any[]} data parameters passed to the stored procedure
+   */
+  async storedProcedure(name, partitionKey, data) {
+    return this.container.scripts.storedProcedure(name).execute(partitionKey, JSON.stringify(data));
+  }
 }
 
 module.exports = Client;
