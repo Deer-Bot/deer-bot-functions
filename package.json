@@ -26,6 +26,7 @@
     "axios": "^0.21.1",
     "bluebird": "^3.7.2",
     "discord.js-light": "^3.5.3",
-    "tedis": "^0.1.12"
+    "tedis": "^0.1.12",
+    "uuid": "^8.3.2"
   }
 }

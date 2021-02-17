@@ -1,12 +1,15 @@
 'use strict';
+const RedisClient = require('../clients/redis-client');
+const CosmosClient = new (require('../clients/cosmos-client'))('Events');
+const {v1: uuid} = require('uuid');
+
 /*
   Set a new event Object
 */
-const RedisClient = require('../clients/redis-client');
-const CosmosClient = new (require('../clients/cosmos-client'))('Events');
-
 module.exports = async function(context, req) {
   if (req.body && req.body.user) {
+    let eventIn = {};
+
     try {
       // get event document object
       const userSession = await RedisClient.get(req.body.user);
@@ -14,22 +17,23 @@ module.exports = async function(context, req) {
       const [event] = JSON.parse(userSession?.events);
 
       if (event) {
-        let eventIn = {};
         // Checks if the document already exists
         if (event.id) {
           const item = await CosmosClient.get(event.id, event.author);
-          eventIn = item.resource; // resource contains the document retrivied
+          eventIn = item.resource; // resource contains the document retrieved
+        } else {
+          eventIn.id = uuid();
         }
 
         // Set document object
         context.bindings.eventOut = eventIn;
-        context.bindings.eventOut.author = event['author'] || req.body.user;
-        context.bindings.eventOut.guild = event['guild'] || context.bindings.eventOut.guild;
-        context.bindings.eventOut.name = event['name'] || context.bindings.eventOut.name;
-        context.bindings.eventOut.description = event['description'] || context.bindings.eventOut.description;
-        context.bindings.eventOut.date = event['date'] || context.bindings.eventOut.date;
-        context.bindings.eventOut.globalReminder = event['globalReminder'] || context.bindings.eventOut.globalReminder;
-        context.bindings.eventOut.privateReminder = event['privateReminder'] || context.bindings.eventOut.privateReminder;
+        context.bindings.eventOut.author = event.author || req.body.user;
+        context.bindings.eventOut.guild = event.guild || context.bindings.eventOut.guild;
+        context.bindings.eventOut.name = event.name || context.bindings.eventOut.name;
+        context.bindings.eventOut.description = event.description || context.bindings.eventOut.description;
+        context.bindings.eventOut.date = event.date || context.bindings.eventOut.date;
+        context.bindings.eventOut.globalReminder = event.globalReminder || context.bindings.eventOut.globalReminder;
+        context.bindings.eventOut.privateReminder = event.privateReminder || context.bindings.eventOut.privateReminder;
         // Dates for next reminder
         const {globalDate, privateDate} = getDateReminder(context.bindings.eventOut.date, context.bindings.eventOut.globalReminder, context.bindings.eventOut.privateReminder);
         context.bindings.eventOut.globalReminderDate = globalDate;
@@ -48,6 +52,7 @@ module.exports = async function(context, req) {
       return {
         status: '200',
         body: {
+          eventId: eventIn.id,
           message: 'Event has been correctly updated',
         },
       };
