@@ -9,15 +9,15 @@ client.login(process.env.DISCORD_TOKEN);
 class DiscordApi {
   static async sendPrivateMessage(userId, event) {
     const user = await client.users.fetch(userId);
-    // TODO: vedere se cambiare
     const embed = await message(event);
+
     user.send(embed);
   }
 
   static async sendPublicMessage(channelId, event) {
     const channel = await client.channels.fetch(channelId);
-    // TODO: vedere se cambiare
     const embed = await message(event);
+
     return channel.send(embed);
   }
 

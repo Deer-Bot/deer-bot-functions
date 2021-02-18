@@ -10,7 +10,7 @@ module.exports = async function(context, req) {
   if (req.body && req.body.events && req.body.isPrivate != undefined) {
     const events = req.body.events;
     if (req.body.isPrivate) {
-      // TODO --
+      // TODO -- Completare
     } else {
       for (const event of events) {
         try {

@@ -28,12 +28,16 @@ module.exports = async function(context, req, guildIn) {
       if (req.body.prefix) {
         context.bindings.guildOut.prefix = req.body.prefix;
       }
+      if (req.body.timezone) {
+        context.bindings.guildOut.timezone = req.body.timezone;
+      }
     } else {
       // create a new guild document object
       context.bindings.guildOut = {
         guild: req.body.guild,
         channel: req.body.channel || null,
         prefix: req.body.prefix || '!',
+        timezone: 0,
       };
     }
 
