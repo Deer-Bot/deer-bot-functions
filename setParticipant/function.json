@@ -16,8 +16,7 @@
       "collectionName": "Events",
       "connectionStringSetting": "COSMOS_CONNECTION_STRING",
       "direction": "in",
-      "id": "{eventId}",
-      "partitionKey": "{authorId}"
+      "sqlQuery": "SELECT * FROM e WHERE e.id = {eventId}"
     },
     {
       "type": "http",

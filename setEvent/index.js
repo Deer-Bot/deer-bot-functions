@@ -1,5 +1,5 @@
 'use strict';
-const RedisClient = require('../clients/redis-client');
+const RedisClient = new (require('../clients/redis-client'))(0);
 const CosmosClient = new (require('../clients/cosmos-client'))('Events');
 const {v1: uuid} = require('uuid');
 

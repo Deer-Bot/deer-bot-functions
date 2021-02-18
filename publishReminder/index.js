@@ -1,5 +1,7 @@
 'use strict';
 const DiscordApi = require('../clients/discord-client');
+const RedisClient = new (require('../clients/redis-client'))(2);
+const confirmEmoji = '✅';
 
 /*
   Publishes the passed events on the dm or on the selected channel
@@ -13,9 +15,13 @@ module.exports = async function(context, req) {
       for (const event of events) {
         try {
           const message = await DiscordApi.sendPublicMessage(event.channel, event);
+          message.react(confirmEmoji);
+          DiscordApi.deleteMessage(event.channel, event.messageId);
+          RedisClient.del(event.messageId)
+              .catch((err) => {});
           // Update next global reminder date
           event.globalReminderDate = getNewGlobalReminderDate(Number.parseInt(event.globalReminder));
-          event.message = message.id; // TODO: vedere se tale campo si chiamerà message
+          event.messageId = message.id;
         } catch (error) {
           context.log(error);
         }

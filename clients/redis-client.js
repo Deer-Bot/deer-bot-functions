@@ -10,13 +10,17 @@ const cacheConnection = new Tedis({
 });
 
 class RedisClient {
-  static async get(key) {
-    await cacheConnection.command('select', 0);
+  constructor(dbIndex) {
+    this.dbIndex = dbIndex;
+  }
+
+  async get(key) {
+    await cacheConnection.command('select', this.dbIndex);
     return cacheConnection.hgetall(key);
   }
 
-  static async del(key) {
-    await cacheConnection.command('select', 0);
+  async del(key) {
+    await cacheConnection.command('select', this.dbIndex);
     await cacheConnection.del(key);
   }
 }

@@ -20,6 +20,14 @@ class DiscordApi {
     const embed = await message(event);
     return channel.send(embed);
   }
+
+  static async deleteMessage(channelId, messageId) {
+    client.channels.fetch(channelId)
+        .then((channel) => {
+          channel.messages.delete(messageId);
+        })
+        .catch((err) => {});
+  }
 }
 
 /**

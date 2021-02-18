@@ -1,11 +1,10 @@
 'use strict';
+const RedisClient = new (require('../clients/redis-client'))(0);
+const CosmosClient = new (require('../clients/cosmos-client'))('Events');
 
 /*
   Remove an event Object
 */
-const RedisClient = require('../clients/redis-client');
-const CosmosClient = new (require('../clients/cosmos-client'))('Events');
-
 module.exports = async function(context, req) {
   if (req.body && req.body.user) {
     try {
