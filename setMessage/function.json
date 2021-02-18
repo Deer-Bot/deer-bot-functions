@@ -1,0 +1,36 @@
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "post"
+      ]
+    },
+    {
+      "type": "cosmosDB",
+      "name": "eventIn",
+      "databaseName": "deer-bot-db",
+      "collectionName": "Events",
+      "connectionStringSetting": "COSMOS_CONNECTION_STRING",
+      "direction": "in",
+      "id": "{eventId}"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    },
+    {
+      "type": "cosmosDB",
+      "name": "eventOut",
+      "databaseName": "deer-bot-db",
+      "collectionName": "Events",
+      "createIfNotExists": false,
+      "connectionStringSetting": "COSMOS_CONNECTION_STRING",
+      "direction": "out"
+    }
+  ]
+}

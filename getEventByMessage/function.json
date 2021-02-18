@@ -1,0 +1,27 @@
+{
+  "bindings": [
+    {
+      "authLevel": "anonymous",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": [
+        "get"
+      ]
+    },
+    {
+      "type": "cosmosDB",
+      "name": "eventIn",
+      "databaseName": "deer-bot-db",
+      "collectionName": "Events",
+      "connectionStringSetting": "COSMOS_CONNECTION_STRING",
+      "direction": "in",
+      "sqlQuery": "SELECT * FROM c WHERE c.messageId = {messageId}"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "$return"
+    }
+  ]
+}
