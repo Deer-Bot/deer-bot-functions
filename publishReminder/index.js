@@ -12,9 +12,10 @@ module.exports = async function(context, req) {
     } else {
       for (const event of events) {
         try {
-          await DiscordApi.sendPublicMessage(event.channel, event);
+          const message = await DiscordApi.sendPublicMessage(event.channel, event);
           // Update next global reminder date
           event.globalReminderDate = getNewGlobalReminderDate(Number.parseInt(event.globalReminder));
+          event.message = message.id; // TODO: vedere se tale campo si chiamerà message
         } catch (error) {
           context.log(error);
         }
