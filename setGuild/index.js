@@ -1,43 +1,48 @@
 const CosmosClient = new (require('../clients/cosmos-client'))('Events');
+
 /*
   Set a new guild Object for the server(guild)
 */
 module.exports = async function(context, req, guildIn) {
-  if (req.body && req.body.guild) {
-    // set guild document object
+  if (req.body && req.body.guildId) {
     if (guildIn[0]) {
       // update guild document object
       context.bindings.guildOut = guildIn[0];
-      if (req.body.channel) {
-        context.bindings.guildOut.channel = req.body.channel;
+
+      if (req.body.channelId) {
+        context.bindings.guildOut.channelId = req.body.channelId;
+
         const sqlQuery = {
-          query: `SELECT * FROM Events e WHERE e.guild = @guild`,
+          query: `SELECT * FROM Events e WHERE e.guildId = @guildId`,
           parameters: [
             {
-              name: '@guild',
-              value: req.body.guild,
+              name: '@guildId',
+              value: req.body.guildId,
             },
           ],
         };
+
         const eventOfGuild = (await CosmosClient.query(sqlQuery)).resources;
         for (const event of eventOfGuild) {
-          event.channel = req.body.channel;
+          event.channelId = req.body.channelId;
         }
         context.bindings.eventsUpdated = eventOfGuild;
       }
+
       if (req.body.prefix) {
         context.bindings.guildOut.prefix = req.body.prefix;
       }
-      if (req.body.timezone) {
-        context.bindings.guildOut.timezone = req.body.timezone;
+
+      if (req.body.timezoneOffset) {
+        context.bindings.guildOut.timezoneOffset = req.body.timezoneOffset;
       }
     } else {
       // create a new guild document object
       context.bindings.guildOut = {
-        guild: req.body.guild,
-        channel: req.body.channel || null,
+        guildId: req.body.guildId,
+        channelId: req.body.channelId || null,
         prefix: req.body.prefix || '!',
-        timezone: 0,
+        timezoneOffset: 0,
       };
     }
 

@@ -20,8 +20,8 @@
       "collectionName": "Guilds",
       "connectionStringSetting": "COSMOS_CONNECTION_STRING",
       "direction": "in",
-      "sqlQuery": "SELECT * FROM c WHERE c.guild = {guild}",
-      "PartitionKey": "{guild}"
+      "sqlQuery": "SELECT * FROM g WHERE g.guildId = {guildId}",
+      "PartitionKey": "{guildId}"
     },
     {
       "type": "cosmosDB",

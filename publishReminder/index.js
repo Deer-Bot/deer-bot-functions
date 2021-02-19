@@ -14,9 +14,9 @@ module.exports = async function(context, req) {
     } else {
       for (const event of events) {
         try {
-          const message = await DiscordApi.sendPublicMessage(event.channel, event);
+          const message = await DiscordApi.sendPublicMessage(event.channelId, event);
           message.react(confirmEmoji);
-          DiscordApi.deleteMessage(event.channel, event.messageId);
+          DiscordApi.deleteMessage(event.channelId, event.messageId);
           RedisClient.del(event.messageId)
               .catch((err) => {});
           // Update next global reminder date

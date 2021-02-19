@@ -7,39 +7,43 @@ const {v1: uuid} = require('uuid');
   Set a new event Object
 */
 module.exports = async function(context, req) {
-  if (req.body && req.body.user) {
+  if (req.body && req.body.userId) {
     let eventIn = {};
 
     try {
       // get event document object
-      const userSession = await RedisClient.get(req.body.user);
+      const userSession = await RedisClient.get(req.body.userId);
       // Parse of the nested object
       const [event] = JSON.parse(userSession?.events);
 
       if (event) {
         // Checks if the document already exists
         if (event.id) {
-          const item = await CosmosClient.get(event.id, event.author);
+          const item = await CosmosClient.get(event.id, event.authorId);
           eventIn = item.resource; // resource contains the document retrieved
         } else {
           eventIn.id = uuid();
         }
 
         // Set document object
-        context.bindings.eventOut = eventIn;
-        context.bindings.eventOut.author = event.author || req.body.user;
-        context.bindings.eventOut.guild = event.guild || context.bindings.eventOut.guild;
-        context.bindings.eventOut.name = event.name || context.bindings.eventOut.name;
-        context.bindings.eventOut.description = event.description || context.bindings.eventOut.description;
-        context.bindings.eventOut.date = event.date || context.bindings.eventOut.date;
-        context.bindings.eventOut.globalReminder = event.globalReminder || context.bindings.eventOut.globalReminder;
-        context.bindings.eventOut.privateReminder = event.privateReminder || context.bindings.eventOut.privateReminder;
+        eventIn.authorId = event.authorId || req.body.userId;
+        eventIn.guildId = event.guildId || eventIn.guildId;
+        eventIn.channelId = event.channelId || eventIn.channelId;
+        eventIn.name = event.name || eventIn.name;
+        eventIn.description = event.description || eventIn.description;
+        eventIn.date = event.date || eventIn.date;
+        eventIn.globalReminder = event.globalReminder || eventIn.globalReminder;
+        eventIn.privateReminder = event.privateReminder || eventIn.privateReminder;
+
         // Dates for next reminder
-        const {globalDate, privateDate} = getDateReminder(context.bindings.eventOut.date, context.bindings.eventOut.globalReminder, context.bindings.eventOut.privateReminder);
-        context.bindings.eventOut.globalReminderDate = globalDate;
-        context.bindings.eventOut.privateReminderDate = privateDate;
+        const {globalDate, privateDate} = getDateReminder(eventIn.date, eventIn.globalReminder, eventIn.privateReminder);
+        eventIn.globalReminderDate = globalDate;
+        eventIn.privateReminderDate = privateDate;
+
+        context.bindings.eventOut = eventIn;
+
         // Delete session from cache
-        await RedisClient.del(req.body.user);
+        await RedisClient.del(req.body.userId);
       } else {
         return {
           status: '400',
@@ -82,8 +86,8 @@ function getDateReminder(eventDate, globalReminder, privateReminder) {
   const privateDate = new Date(eventDate);
   const hours = Math.floor(privateReminder / 60);
   const min = privateReminder % 60;
-  privateDate.setHours(privateDate.getHours() - hours);
-  privateDate.setMinutes(privateDate.getMinutes() - min);
+  privateDate.setUTCHours(privateDate.getHours() - hours);
+  privateDate.setUTCMinutes(privateDate.getMinutes() - min);
 
   return {
     globalDate: globalDate,

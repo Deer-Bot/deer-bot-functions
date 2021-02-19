@@ -16,7 +16,7 @@
       "collectionName": "Events",
       "connectionStringSetting": "COSMOS_CONNECTION_STRING",
       "direction": "in",
-      "sqlQuery": "SELECT * FROM c WHERE c.messageId = {messageId}"
+      "sqlQuery": "SELECT * FROM e WHERE e.messageId = {messageId}"
     },
     {
       "type": "http",

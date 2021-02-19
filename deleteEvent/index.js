@@ -1,24 +1,30 @@
 'use strict';
-const RedisClient = new (require('../clients/redis-client'))(0);
+const RedisClient = require('../clients/redis-client');
 const CosmosClient = new (require('../clients/cosmos-client'))('Events');
+const DiscordApi = require('../clients/discord-client');
+
+const RedisConversation = new RedisClient(0);
+const RedisEventMessage = new RedisClient(2);
 
 /*
   Remove an event Object
 */
 module.exports = async function(context, req) {
-  if (req.body && req.body.user) {
+  if (req.body && req.body.userId) {
     try {
       // get event document object from user session
-      const userSession = await RedisClient.get(req.body.user);
+      const userSession = await RedisConversation.get(req.body.userId);
       // Parse of the nested object
       const [event] = JSON.parse(userSession?.events);
 
       if (event && event.id) {
         // Delete event from DB
-        const item = await CosmosClient.delete(event.id, event.author);
+        const item = await CosmosClient.delete(event.id, event.authorId);
         if (item.statusCode === 204) {
           // Delete session from cache
-          await RedisClient.del(req.body.user);
+          await RedisConversation.del(req.body.userId);
+          await RedisEventMessage.del(event.messageId);
+          DiscordApi.deleteMessage(event.channelId, event.messageId);
 
           return {
             status: '200',
