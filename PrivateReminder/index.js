@@ -14,8 +14,6 @@ module.exports = async function(context, myTimer, eventsToRemind) {
     axios.post(functionEndpoint, {
       events: singlePage,
       isPrivate: true,
-    }).catch((err) => {
-      context.log(err);
-    });
+    }).catch((err) => {});
   }
 };

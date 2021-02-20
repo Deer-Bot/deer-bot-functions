@@ -32,11 +32,12 @@ module.exports = async function(context, req) {
         eventIn.name = event.name || eventIn.name;
         eventIn.description = event.description || eventIn.description;
         eventIn.date = event.date || eventIn.date;
+        eventIn.localDate = event.localDate || eventIn.localDate;
         eventIn.globalReminder = event.globalReminder || eventIn.globalReminder;
         eventIn.privateReminder = event.privateReminder || eventIn.privateReminder;
 
         // Dates for next reminder
-        const {globalDate, privateDate} = getDateReminder(eventIn.date, eventIn.globalReminder, eventIn.privateReminder);
+        const {globalDate, privateDate} = getDateReminder(event);
         eventIn.globalReminderDate = globalDate;
         eventIn.privateReminderDate = privateDate;
 
@@ -77,17 +78,29 @@ module.exports = async function(context, req) {
 };
 
 // Simple function to calculate next date reminder
-function getDateReminder(eventDate, globalReminder, privateReminder) {
+function getDateReminder(event) {
   // Date for next global reminder
+  const eventDate = event.date;
+  const privateReminder = event.privateReminder;
+  const days = Number.parseInt(event.globalReminder);
+
   const globalDate = new Date(Date.now());
-  globalDate.setUTCDate(globalDate.getDate() + (+globalReminder));
+  const index = event.localDate.indexOf('GMT') + 3;
+
+  let timezoneOffset = 0;
+  if (index < event.localDate.length) {
+    timezoneOffset = Number.parseInt(event.localDate.substring(index));
+  }
+
+  globalDate.setUTCDate(globalDate.getUTCDate() + days);
+  globalDate.setUTCHours(globalDate.getUTCHours() + timezoneOffset);
   globalDate.setUTCHours(0, 0);
   // Date for next private reminder
   const privateDate = new Date(eventDate);
   const hours = Math.floor(privateReminder / 60);
   const min = privateReminder % 60;
-  privateDate.setUTCHours(privateDate.getHours() - hours);
-  privateDate.setUTCMinutes(privateDate.getMinutes() - min);
+  privateDate.setUTCHours(privateDate.getUTCHours() - hours);
+  privateDate.setUTCMinutes(privateDate.getUTCMinutes() - min);
 
   return {
     globalDate: globalDate,

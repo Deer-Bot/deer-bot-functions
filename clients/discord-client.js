@@ -37,28 +37,15 @@ class DiscordApi {
 const message = async (event) => {
   const guild = await client.guilds.fetch(event.guildId);
   const member = await guild.members.fetch(event.authorId);
-  const date = new Date(event.date);
 
   const embed = new Discord.MessageEmbed();
   embed.setTitle(event.name)
       .setDescription(event.description)
       .setAuthor(member.displayName, member.user.displayAvatarURL())
-      .addField('Date', dateToString(date) )
+      .addField('Date', event.localDate)
       .setColor(gold);
 
   return embed;
 };
-
-// Utility functions
-const pads = (s) => {
-  return s < 10 ? `0${s}` : `${s}`;
-};
-
-// TODO: Orario localizzato
-const dateToString = (date) => {
-  const dateString = [pads(date.getUTCDate()), pads(date.getUTCMonth() + 1), pads(date.getUTCFullYear())].join('-');
-  return `${dateString} at ${date.getUTCHours()}:${pads(date.getUTCMinutes())}`;
-};
-
 
 module.exports = DiscordApi;

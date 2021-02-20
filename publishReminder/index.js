@@ -20,7 +20,7 @@ module.exports = async function(context, req) {
           RedisClient.del(event.messageId)
               .catch((err) => {});
           // Update next global reminder date
-          event.globalReminderDate = getNewGlobalReminderDate(Number.parseInt(event.globalReminder));
+          event.globalReminderDate = getNewGlobalReminderDate(event);
           event.messageId = message.id;
         } catch (error) {
           context.log(error);
@@ -41,12 +41,21 @@ module.exports = async function(context, req) {
 
 /**
  *  Utility function to calculate next date
- * @param {number} days
+ * @param {Object} event
  * @return {Date}
  */
-function getNewGlobalReminderDate(days) {
+function getNewGlobalReminderDate(event) {
+  const days = Number.parseInt(event.globalReminder);
   const globalDate = new Date(Date.now());
-  globalDate.setUTCDate(globalDate.getDate() + days);
+  const index = event.localDate.indexOf('GMT') + 3;
+
+  let timezoneOffset = 0;
+  if (index < event.localDate.length) {
+    timezoneOffset = Number.parseInt(event.localDate.substring(index));
+  }
+
+  globalDate.setUTCDate(globalDate.getUTCDate() + days);
+  globalDate.setUTCHours(globalDate.getUTCHours() + timezoneOffset);
   globalDate.setUTCHours(0, 0);
 
   return globalDate;
