@@ -4,7 +4,7 @@
       "name": "myTimer",
       "type": "timerTrigger",
       "direction": "in",
-      "schedule": "0 5 * * * *",
+      "schedule": "0 */5 * * * *",
       "runOnStartup": false
     },
     {
@@ -14,7 +14,7 @@
       "collectionName": "Events",
       "connectionStringSetting": "COSMOS_CONNECTION_STRING",
       "direction": "in",
-      "sqlQuery": "SELECT * FROM e WHERE e.privateReminderDate < GetCurrentDateTime()"
+      "sqlQuery": "SELECT * FROM e WHERE e.privateReminderDate < GetCurrentDateTime() AND e.date >= GetCurrentDateTime()"
     }
   ]
 }

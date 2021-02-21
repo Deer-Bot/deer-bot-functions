@@ -9,9 +9,9 @@ client.login(process.env.DISCORD_TOKEN);
 class DiscordApi {
   static async sendPrivateMessage(userId, event) {
     const user = await client.users.fetch(userId);
-    const embed = await message(event);
+    const embeds = await privateMessage(event);
 
-    user.send(embed);
+    return user.send(embeds[0]).then(() => user.send(embeds[1]));
   }
 
   static async sendPublicMessage(channelId, event) {
@@ -46,6 +46,29 @@ const message = async (event) => {
       .setColor(gold);
 
   return embed;
+};
+
+/**
+ *  Create the message for the passed event
+ * @param {Object} event
+ */
+const privateMessage = async (event) => {
+  const guild = await client.guilds.fetch(event.guildId);
+  const member = await guild.members.fetch(event.authorId);
+
+  const reminderEmbed = new Discord.MessageEmbed();
+  reminderEmbed.setTitle(`The **'${event.name}'** event is about to start on the **${guild.name}** server.\n\nDon't miss it! ⏰`)
+      .setDescription('See event details below.')
+      .setColor('5B50FF');
+
+  const eventEmbed = new Discord.MessageEmbed();
+  eventEmbed.setTitle(event.name)
+      .setDescription(event.description)
+      .setAuthor(member.displayName, member.user.displayAvatarURL())
+      .addField('Date', event.localDate)
+      .setColor(gold);
+
+  return [reminderEmbed, eventEmbed];
 };
 
 module.exports = DiscordApi;

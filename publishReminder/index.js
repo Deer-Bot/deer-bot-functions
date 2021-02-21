@@ -10,12 +10,24 @@ module.exports = async function(context, req) {
   if (req.body && req.body.events && req.body.isPrivate != undefined) {
     const events = req.body.events;
     if (req.body.isPrivate) {
-      // TODO -- Completare
+      for (const event of events) {
+        if (event.participants) {
+          for (const participant of event.participants) {
+            try {
+              await DiscordApi.sendPrivateMessage(participant, event);
+            } catch (error) {
+              context.log(error);
+            }
+          }
+        }
+        event.privateReminderDate = event.date;
+      }
     } else {
       for (const event of events) {
         try {
           const message = await DiscordApi.sendPublicMessage(event.channelId, event);
           message.react(confirmEmoji);
+          // Remove old message and remove his id from cache
           DiscordApi.deleteMessage(event.channelId, event.messageId);
           RedisClient.del(event.messageId)
               .catch((err) => {});
@@ -26,9 +38,9 @@ module.exports = async function(context, req) {
           context.log(error);
         }
       }
-      // Update of the events
-      context.bindings.updateEvents = events;
     }
+    // Update of the events
+    context.bindings.updateEvents = events;
   } else {
     return {
       status: 400,
