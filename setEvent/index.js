@@ -19,7 +19,7 @@ module.exports = async function(context, req) {
       if (event) {
         // Checks if the document already exists
         if (event.id) {
-          const item = await CosmosClient.get(event.id, event.authorId);
+          const item = await CosmosClient.get(event.id, event.guildId);
           eventIn = item.resource; // resource contains the document retrieved
         } else {
           eventIn.id = uuid();

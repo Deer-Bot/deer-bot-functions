@@ -6,32 +6,32 @@
       "direction": "in",
       "name": "req",
       "methods": [
-        "post"
+        "delete"
       ]
     },
     {
       "type": "cosmosDB",
-      "name": "eventIn",
+      "name": "guildIn",
+      "databaseName": "deer-bot-db",
+      "collectionName": "Guilds",
+      "connectionStringSetting": "COSMOS_CONNECTION_STRING",
+      "direction": "in",
+      "sqlQuery": "SELECT * FROM g WHERE g.guildId = {guildId}",
+      "PartitionKey": "{guildId}"
+    },
+    {
+      "type": "cosmosDB",
+      "name": "eventsIn",
       "databaseName": "deer-bot-db",
       "collectionName": "Events",
       "connectionStringSetting": "COSMOS_CONNECTION_STRING",
       "direction": "in",
-      "id": "{eventId}",
-      "partitionKey": "{guildId}"
+      "sqlQuery": "SELECT * FROM e WHERE e.guildId = {guildId}"
     },
     {
       "type": "http",
       "direction": "out",
       "name": "$return"
-    },
-    {
-      "type": "cosmosDB",
-      "name": "eventOut",
-      "databaseName": "deer-bot-db",
-      "collectionName": "Events",
-      "createIfNotExists": false,
-      "connectionStringSetting": "COSMOS_CONNECTION_STRING",
-      "direction": "out"
     }
   ]
 }

@@ -19,7 +19,7 @@ module.exports = async function(context, req) {
 
       if (event && event.id) {
         // Delete event from DB
-        const item = await CosmosClient.delete(event.id, event.authorId);
+        const item = await CosmosClient.delete(event.id, event.guildId);
         if (item.statusCode === 204) {
           // Delete session from cache
           await RedisConversation.del(req.body.userId);

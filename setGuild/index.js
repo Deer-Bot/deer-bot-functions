@@ -33,7 +33,7 @@ module.exports = async function(context, req, guildIn) {
         context.bindings.guildOut.prefix = req.body.prefix;
       }
 
-      if (req.body.timezoneOffset) {
+      if (req.body.timezoneOffset !== undefined) {
         context.bindings.guildOut.timezoneOffset = req.body.timezoneOffset;
       }
     } else {
@@ -42,7 +42,7 @@ module.exports = async function(context, req, guildIn) {
         guildId: req.body.guildId,
         channelId: req.body.channelId || null,
         prefix: req.body.prefix || '!',
-        timezoneOffset: 0,
+        timezoneOffset: req.body.timezoneOffset || 100,
       };
     }
 

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const deleteExpiredStoredProcedure = {
-  id: 'DeleteExpiredEvents',
+  id: 'DeleteEvents',
   serverScript: function(events) {
     events = JSON.parse(events);
     if (!events) throw new Error('The array is undefined or null.');
