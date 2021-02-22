@@ -11,12 +11,12 @@
     },
     {
       "type": "cosmosDB",
-      "name": "eventIn",
+      "name": "eventsIn",
       "databaseName": "deer-bot-db",
       "collectionName": "Events",
       "connectionStringSetting": "COSMOS_CONNECTION_STRING",
       "direction": "in",
-      "sqlQuery": "SELECT * FROM e WHERE e.messageInfo.messageId = {messageId}"
+      "sqlQuery": "SELECT e.messageInfo FROM e WHERE e.date >= GetCurrentDateTime()"
     },
     {
       "type": "http",

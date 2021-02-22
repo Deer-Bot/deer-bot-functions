@@ -23,9 +23,7 @@ class DiscordApi {
 
   static async deleteMessage(channelId, messageId) {
     client.channels.fetch(channelId)
-        .then((channel) => {
-          channel.messages.delete(messageId);
-        })
+        .then((channel) => channel.messages.delete(messageId))
         .catch((err) => {});
   }
 }

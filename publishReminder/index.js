@@ -31,12 +31,16 @@ module.exports = async function(context, req) {
           const message = await DiscordApi.sendPublicMessage(event.channelId, event);
           message.react(confirmEmoji);
           // Remove old message and remove his id from cache
-          DiscordApi.deleteMessage(event.channelId, event.messageId);
-          RedisClient.del(event.messageId)
+          DiscordApi.deleteMessage(event.messageInfo.channelId, event.messageInfo.messageId);
+          RedisClient.del(event.messageInfo.messageId)
               .catch((err) => {});
-          // Update next global reminder date
+
+          // Update next global reminder date and messageInfo
           event.globalReminderDate = getNewGlobalReminderDate(event);
-          event.messageId = message.id;
+          event.messageInfo = {
+            channelId: event.channelId,
+            messageId: message.id,
+          };
         } catch (error) {
           context.log(error);
         }

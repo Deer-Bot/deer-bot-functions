@@ -2,7 +2,10 @@ module.exports = async function(context, req, eventIn) {
   if (req.body && req.body.eventId && req.body.messageId) {
     if (eventIn) {
       context.bindings.eventOut = eventIn;
-      context.bindings.eventOut.messageId = req.body.messageId;
+      context.bindings.eventOut.messageInfo = {
+        channelId: eventIn.channelId,
+        messageId: req.body.messageId,
+      };
       return {
         status: 200,
         body: {
