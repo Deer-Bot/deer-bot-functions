@@ -25,6 +25,9 @@ module.exports = async function(context, req) {
     } else {
       for (const event of events) {
         try {
+          if (event.channelId == '-1') {
+            continue;
+          }
           const message = await DiscordApi.sendPublicMessage(event.channelId, event);
           message.react(confirmEmoji);
           // Remove old message and remove his id from cache
