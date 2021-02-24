@@ -1,8 +1,8 @@
 'use strict';
 
-const {Tedis} = require('tedis');
+const {TedisPool} = require('tedis');
 
-const cacheConnection = new Tedis({
+const connectionPool = new TedisPool({
   host: process.env.REDIS_HOSTNAME,
   port: process.env.REDIS_PORT,
   password: process.env.REDIS_KEY,
@@ -17,13 +17,21 @@ class RedisClient {
   }
 
   async get(key) {
-    await cacheConnection.command('select', this.dbIndex);
-    return cacheConnection.hgetall(key);
+    const connection = await connectionPool.getTedis();
+
+    await connection.command('select', this.dbIndex);
+    const result = await connectionPool.hgetall(key);
+    connectionPool.putTedis(connection);
+
+    return result;
   }
 
   async del(key) {
-    await cacheConnection.command('select', this.dbIndex);
-    await cacheConnection.del(key);
+    const connection = await connectionPool.getTedis();
+
+    await connection.command('select', this.dbIndex);
+    await connectionPool.del(key);
+    connectionPool.putTedis(connection);
   }
 }
 
