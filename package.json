@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "patch-package"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "axios": "^0.21.1",
     "bluebird": "^3.7.2",
     "discord.js-light": "^3.5.3",
+    "patch-package": "^6.2.2",
     "tedis": "^0.1.12",
     "uuid": "^8.3.2"
   }
