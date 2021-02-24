@@ -20,7 +20,7 @@ class RedisClient {
     const connection = await connectionPool.getTedis();
 
     await connection.command('select', this.dbIndex);
-    const result = await connectionPool.hgetall(key);
+    const result = await connection.hgetall(key);
     connectionPool.putTedis(connection);
 
     return result;
@@ -30,7 +30,7 @@ class RedisClient {
     const connection = await connectionPool.getTedis();
 
     await connection.command('select', this.dbIndex);
-    await connectionPool.del(key);
+    await connection.del(key);
     connectionPool.putTedis(connection);
   }
 }
