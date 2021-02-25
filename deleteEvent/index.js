@@ -23,8 +23,8 @@ module.exports = async function(context, req) {
         if (item.statusCode === 204) {
           // Delete session from cache
           await RedisConversation.del(req.body.userId);
-          await RedisEventMessage.del(event.messageId);
-          DiscordApi.deleteMessage(event.channelId, event.messageId);
+          await RedisEventMessage.del(event.messageInfo.messageId);
+          DiscordApi.deleteMessage(event.messageInfo.channelId, event.messageInfo.messageId);
 
           return {
             status: '200',
