@@ -20,7 +20,7 @@ module.exports = async function(context, req) {
             }
           }
         }
-        event.privateReminderDate = event.date;
+        event.privateReminderDate = new Date((new Date(event.date)).getTime() - 60000 * 6); // 6 minuti
       }
     } else {
       for (const event of events) {
